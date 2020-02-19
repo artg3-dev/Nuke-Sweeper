@@ -14,14 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package artg3dev.nukesweeper;
+package nukesweeper;
+
+import java.util.Scanner;
+import nukesweeper.Engine.Game;
+import nukesweeper.Engine.Node;
 
 /**
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println("hello");
+        Game game = new Game(3, 5, 2);
+        game.start(new Node(0, 0));
+        game.printGrid();
+        System.out.println("");
+        Scanner reader = new Scanner(System.in);
+        System.out.print("X?: ");
+        int x = Integer.parseInt(reader.nextLine());
+        System.out.print("Y?: ");
+        int y = Integer.parseInt(reader.nextLine());
+//            System.out.println("Nuke Count: "
+//                    + game.getNukeCount(x, y));
+//            System.out.println("");
+//            game.printGrid();
+        System.out.println(game.getNode(x, y));
     }
 }
