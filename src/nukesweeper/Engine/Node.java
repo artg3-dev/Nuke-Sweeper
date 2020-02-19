@@ -16,18 +16,23 @@
  */
 package nukesweeper.Engine;
 
+import nukesweeper.Engine.Exceptions.NukeFoundException;
+
 /**
  * For individual points on a grid
+ *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
 public class Node {
+
     private final int x, y;
-    private boolean isNuke;
+    private boolean isNuke, checked;
 
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
         this.isNuke = false;
+        this.checked = false;
     }
 
     public int getX() {
@@ -46,18 +51,30 @@ public class Node {
         return isNuke;
     }
 
+    public void check() throws NukeFoundException {
+        if (isNuke) {
+            throw new NukeFoundException(this);
+        } else {
+            this.checked = true;
+        }
+    }
+
+    public boolean wasChecked() {
+        return this.checked;
+    }
+
     @Override
     public boolean equals(Object inQuestion) {
         if (inQuestion == null) {
             return false;
         }
-        
+
         if (getClass() != inQuestion.getClass()) {
             return false;
         }
 
         Node compared = (Node) inQuestion;
-        
+
         return this.x == compared.x && this.y == compared.y;
     }
 
@@ -65,19 +82,17 @@ public class Node {
     public int hashCode() {
         return (super.hashCode() + x) * y;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Node:\n");
-        sb.append("X = ");
+        sb.append("Node (");
         sb.append(x);
-        sb.append("\n");
-        sb.append("Y = ");
+        sb.append(", ");
         sb.append(y);
-        sb.append("\n");
-        sb.append("Nuke?: ");
+        sb.append(", ");
         sb.append(isNuke);
+        sb.append(")");
         return sb.toString();
     }
 }

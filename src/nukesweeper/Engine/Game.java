@@ -16,7 +16,12 @@
  */
 package nukesweeper.Engine;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import nukesweeper.Engine.Exceptions.NukeFoundException;
 
 /**
  *
@@ -71,6 +76,32 @@ public class Game {
         }
     }
 
+    public void checkNode(Node node) throws NukeFoundException {
+        List<Node> checked = new ArrayList();
+        Queue<Node> toCheck = new LinkedList();
+        toCheck.add(node);
+        while (toCheck.size() > 0) {
+            // Pull Node from toCheck queue
+            Node next = toCheck.poll();
+
+            // Check it if it isn't in checked list & add to checked
+            if (!checked.contains(next)) {
+                next.check();
+                checked.add(next);
+            }
+
+            // If # of neighboring nukes == 0, add neighbors to toCheck queue
+            if (!next.isNuke() && grid.getNeighborNukeCount(next) == 0) {
+                List<Node> neighbors = grid.getNeighbors(next);
+                for (Node i : neighbors) {
+                    if (!checked.contains(i)) {
+                        toCheck.add(i);
+                    }
+                }
+            }
+        }
+    }
+
     public Grid getGrid() {
         return this.grid;
     }
@@ -109,23 +140,18 @@ public class Game {
         System.out.println("");
         for (int y = 0; y < grid.height; y++) {
             for (int x = -1; x < grid.width; x++) {
-                if (x == -1) {
+                try {
+                    Node current = grid.getNode(x, y);
+                    if (current.wasChecked()) {
+                        System.out.print(grid.getNeighborNukeCount(current) + " ");
+                    } else {
+                        System.out.print("* ");
+                    }
+                } catch (Exception e) {
                     System.out.print(y + " ");
-                } else if (grid.getNode(x, y).isNuke()) {
-                    System.out.print("N ");
-                } else {
-                    System.out.print("* ");
                 }
             }
             System.out.println("");
         }
-    }
-
-    public int getNukeCount(int x, int y) {
-        return grid.getNeighborNukeCount(x, y);
-    }
-
-    public Node getNode(int x, int y) {
-        return grid.getNode(x, y);
     }
 }

@@ -16,6 +16,8 @@
  */
 package nukesweeper.Engine;
 
+import java.util.ArrayList;
+
 /**
  * Grid is a 2 Dimensional array of nodes.
  * @author Art Garcia (artg3.dev@gmail.com)
@@ -36,6 +38,23 @@ public class Grid {
         return grid[x][y];
     }
     
+    ArrayList<Node> getNeighbors(Node node) {
+        ArrayList<Node> neighbors = new ArrayList();
+        int x = node.getX();
+        int y = node.getY();
+        for (int i = -1; i <= 1; i ++) {
+            for (int j = -1; j <= 1; j ++) {
+                try {
+                    Node neighbor = grid[x + i][y + j];
+                    neighbors.add(neighbor);
+                } catch (Exception e) {
+                }
+            }
+        }
+        
+        return neighbors;
+    }
+    
     int getNeighborNukeCount(int x, int y) {
         Node target = grid[x][y];
         int count = 0;
@@ -52,6 +71,10 @@ public class Grid {
         }
         
         return count;
+    }
+    
+    int getNeighborNukeCount(Node node) {
+        return getNeighborNukeCount(node.getX(), node.getY());
     }
     
     private void fillGrid() {
