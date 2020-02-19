@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nukesweeper;
+package nukesweeper.Engine;
 
 import java.util.Scanner;
-import nukesweeper.Engine.Game;
-import nukesweeper.Engine.Node;
 
 /**
  *
@@ -27,19 +25,15 @@ import nukesweeper.Engine.Node;
 public class Main {
 
     public static void main(String[] args) {
-        Game game = new Game(3, 5, 2);
-        game.start(new Node(0, 0));
+        Game game = new Game(5, 3, 5);
+        Grid grid = game.getGrid();
+        game.start(grid.getNode(0, 0));
         game.printGrid();
-        System.out.println("");
         Scanner reader = new Scanner(System.in);
-        System.out.print("X?: ");
+        System.out.print("X: ");
         int x = Integer.parseInt(reader.nextLine());
-        System.out.print("Y?: ");
+        System.out.print("Y: ");
         int y = Integer.parseInt(reader.nextLine());
-//            System.out.println("Nuke Count: "
-//                    + game.getNukeCount(x, y));
-//            System.out.println("");
-//            game.printGrid();
-        System.out.println(game.getNode(x, y));
+        System.out.println(game.getNukeCount(x, y));
     }
 }

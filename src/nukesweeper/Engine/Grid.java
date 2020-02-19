@@ -41,11 +41,8 @@ public class Grid {
         int count = 0;
         for (int i = -1; i <= 1; i ++) {
             for (int j = -1; j <= 1; j ++) {
-                System.out.println("X: " + (x + i));
-                System.out.println("Y: " + (y + j));
                 try {
                     Node neighbor = grid[x + i][y + j];
-                    System.out.println(neighbor.isNuke());
                     if(neighbor.isNuke() && !neighbor.equals(target)) {
                         count++;
                     }

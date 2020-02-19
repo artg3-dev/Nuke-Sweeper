@@ -59,16 +59,20 @@ public class Game {
                 /* 
                 * Makes node a nuke only if it isn't the start and isn't one
                 * already.
-                */
+                 */
                 if (!n.equals(startingNode) && !n.isNuke()) {
                     n.makeNuke();
-                    addedNukes ++;
+                    addedNukes++;
                 }
             }
             return true;
         } else {
             return false; // If the game has already been started
         }
+    }
+
+    public Grid getGrid() {
+        return this.grid;
     }
 
     private Grid generateGrid(String difficulty) {
@@ -92,12 +96,10 @@ public class Game {
             return 10;
         }
     }
-    
+
     // TESTING
     public void printGrid() {
-        System.out.println(grid);
-        System.out.println("");
-        for (int i = -1; i < grid.width; i ++) {
+        for (int i = -1; i < grid.width; i++) {
             if (i == -1) {
                 System.out.print("X ");
             } else {
@@ -105,23 +107,24 @@ public class Game {
             }
         }
         System.out.println("");
-        for (int x = 0; x < grid.width; x ++) {
-            System.out.print(x + " ");
-            for (int y = 0; y < grid.height; y ++) {
-                if (grid.getNode(x, y).isNuke()) {
+        for (int y = 0; y < grid.height; y++) {
+            for (int x = -1; x < grid.width; x++) {
+                if (x == -1) {
+                    System.out.print(y + " ");
+                } else if (grid.getNode(x, y).isNuke()) {
                     System.out.print("N ");
                 } else {
                     System.out.print("* ");
                 }
             }
-            System.out.println("\n");
+            System.out.println("");
         }
     }
-    
+
     public int getNukeCount(int x, int y) {
         return grid.getNeighborNukeCount(x, y);
     }
-    
+
     public Node getNode(int x, int y) {
         return grid.getNode(x, y);
     }
