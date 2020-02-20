@@ -5,29 +5,33 @@
  */
 package nukesweeper.GUI.Node;
 
+import nukesweeper.GUI.Icons.IconLoader;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import nukesweeper.Engine.Exceptions.NukeFoundException;
 import nukesweeper.Engine.Node;
 
 /**
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
-public class NodeButton extends JButton implements MouseListener, ActionListener{
+public class NodeButton extends JButton implements MouseListener, ActionListener {
+
     private final Color backgroundColor = Color.decode("#000000");
     private final Color checkedBackgroundColor = Color.decode("#2D2D2D");
     private final Color borderDark = Color.decode("#1D1D1D");
     private final Color borderLight = Color.decode("#4D4D4D");
     private final int iconScale = 61;
-    
+
     private final Node node;
     private boolean flagged;
     private final IconLoader flag, nuke;
@@ -37,16 +41,21 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         super.setContentAreaFilled(false);
         this.node = node;
         this.flagged = false;
-        this.flag = new IconLoader("nuclear.png", getClass(), iconScale);
-        this.nuke = new IconLoader("missile.png", getClass(), iconScale);
+        this.flag = new IconLoader("nuclear.png");
+        this.nuke = new IconLoader("missile.png");
         format();
     }
-    
+
     public boolean isFlagged() {
         return flagged;
     }
 
     private void format() {
+        try {
+            flag.load();
+            nuke.load();
+        } catch (IOException e) {
+        }
         addMouseListener(this);
         addActionListener(this);
         setFocusable(false);
@@ -95,15 +104,13 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3) {
-            System.out.println(getWidth());
-            System.out.println(getHeight());
+        if (e.getButton() == MouseEvent.BUTTON3 && e.getClickCount() == 1) {
             if (flagged) {
                 flagged = false;
                 setIcon(null);
-            } else {
+            } else if (!node.wasChecked()) {
                 flagged = true;
-                setIcon(flag.getIcon());
+                setIcon(flag.getIcon(iconScale));
             }
         }
     }
@@ -126,8 +133,12 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        try {
+            node.check();
+        } catch (NukeFoundException ex) {
+        }
         setBackground(checkedBackgroundColor);
         setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, borderLight, borderDark));
-        setIcon(nuke.getIcon());
+        setIcon(nuke.getIcon(iconScale));
     }
 }
