@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import nukesweeper.Engine.Exceptions.NukeFoundException;
@@ -122,15 +123,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3 && e.getClickCount() == 1) {
-            if (flagged) {
-                flagged = false;
-                setIcon(null);
-            } else if (!node.wasChecked()) {
-                flagged = true;
-                setIcon(flag.getIcon(iconScale));
-            }
     public void actionPerformed(ActionEvent e) {
         try {
             node.check();
@@ -151,6 +143,17 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (this.getMousePosition() != null) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                if (flagged) {
+                    flagged = false;
+                    setIcon(null);
+                } else if (!node.wasChecked()) {
+                    flagged = true;
+                    setIcon(flag.getIcon(iconScale));
+                }
+            }
+        }
     }
 
     @Override
