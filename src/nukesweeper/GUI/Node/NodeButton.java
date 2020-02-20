@@ -17,6 +17,7 @@ import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import nukesweeper.Engine.Exceptions.NukeFoundException;
 import nukesweeper.Engine.Node;
 
@@ -30,6 +31,17 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     private final Color checkedBackgroundColor = Color.decode("#2D2D2D");
     private final Color borderDark = Color.decode("#1D1D1D");
     private final Color borderLight = Color.decode("#4D4D4D");
+    private final Color borderHoverDark = Color.decode("#4D4D4D");
+    private final Color borderHoverLight = Color.decode("#6D6D6D");
+    private final Border defaultBorder
+            = BorderFactory.createBevelBorder(
+                    BevelBorder.RAISED, borderLight, borderDark);
+    private final Border hoverBorder
+            = BorderFactory.createBevelBorder(
+                    BevelBorder.RAISED, borderHoverLight, borderHoverDark);
+    private final Border checkedBorder
+            = BorderFactory.createBevelBorder(
+                    BevelBorder.LOWERED, borderLight, borderDark);
     private final int iconScale = 61;
 
     private final Node node;
@@ -60,7 +72,7 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         addActionListener(this);
         setFocusable(false);
         setBackground(backgroundColor);
-        setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, borderLight, borderDark));
+        setBorder(defaultBorder);
     }
 
     @Override
@@ -68,17 +80,24 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         if (getModel().isPressed()) {
 //            g.setColor(Color.pink);
             g.setColor(getBackground());
+            if (!node.wasChecked()) {
+                setBorder(defaultBorder);
+            }
         } else if (getModel().isRollover()) {
             g.setColor(getBackground());
+            if (!node.wasChecked()) {
+                setBorder(hoverBorder);
+            }
         } else {
             g.setColor(getBackground());
+            if (!node.wasChecked()) {
+                setBorder(defaultBorder);
+            } else {
+                setBorder(checkedBorder);
+            }
         }
         g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
-    }
-
-    @Override
-    public void setContentAreaFilled(boolean b) {
     }
 
     @Override
@@ -112,7 +131,18 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
                 flagged = true;
                 setIcon(flag.getIcon(iconScale));
             }
+    public void actionPerformed(ActionEvent e) {
+        try {
+            node.check();
+        } catch (NukeFoundException ex) {
         }
+        setBackground(checkedBackgroundColor);
+        setBorder(checkedBorder);
+        setIcon(nuke.getIcon(iconScale));
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
     }
 
     @Override
@@ -132,13 +162,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-            node.check();
-        } catch (NukeFoundException ex) {
-        }
-        setBackground(checkedBackgroundColor);
-        setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, borderLight, borderDark));
-        setIcon(nuke.getIcon(iconScale));
+    public void setContentAreaFilled(boolean b) {
     }
 }
