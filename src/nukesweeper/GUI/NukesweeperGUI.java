@@ -5,6 +5,7 @@
  */
 package nukesweeper.GUI;
 
+import nukesweeper.GUI.Node.NodeButton;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;

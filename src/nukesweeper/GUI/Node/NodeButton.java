@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nukesweeper.GUI;
+package nukesweeper.GUI.Node;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -26,14 +26,24 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     private final Color checkedBackgroundColor = Color.decode("#2D2D2D");
     private final Color borderDark = Color.decode("#1D1D1D");
     private final Color borderLight = Color.decode("#4D4D4D");
+    private final int iconScale = 61;
     
     private final Node node;
+    private boolean flagged;
+    private final IconLoader flag, nuke;
 
     public NodeButton(Node node) {
         super();
         super.setContentAreaFilled(false);
         this.node = node;
+        this.flagged = false;
+        this.flag = new IconLoader("nuclear.png", getClass(), iconScale);
+        this.nuke = new IconLoader("missile.png", getClass(), iconScale);
         format();
+    }
+    
+    public boolean isFlagged() {
+        return flagged;
     }
 
     private void format() {
@@ -86,7 +96,15 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3) {
-            System.out.println("RIGHT CLICK");
+            System.out.println(getWidth());
+            System.out.println(getHeight());
+            if (flagged) {
+                flagged = false;
+                setIcon(null);
+            } else {
+                flagged = true;
+                setIcon(flag.getIcon());
+            }
         }
     }
 
@@ -110,5 +128,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     public void actionPerformed(ActionEvent e) {
         setBackground(checkedBackgroundColor);
         setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, borderLight, borderDark));
+        setIcon(nuke.getIcon());
     }
 }
