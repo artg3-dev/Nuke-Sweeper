@@ -36,6 +36,11 @@ public class TimerLogic {
         }
     }
     
+    void restart() {
+        seconds = 0;
+        minutes = 0;
+    }
+    
     String getTime() {
         StringBuilder sb = new StringBuilder();
         if (minutes < 10) {

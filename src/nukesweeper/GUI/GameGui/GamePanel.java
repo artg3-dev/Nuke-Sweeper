@@ -21,33 +21,41 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import nukesweeper.Engine.Game;
 import nukesweeper.Engine.Node;
 import nukesweeper.GUI.CustomListeners.GameStartListener;
 import nukesweeper.GUI.CustomListeners.NukeFoundListener;
 import nukesweeper.GUI.GridGui.GridPanel;
-import nukesweeper.GUI.NukesweeperGUI;
 import nukesweeper.GUI.Timer.TimerDisplay;
 
 /**
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
+
 public class GamePanel extends JPanel 
         implements ActionListener, GameStartListener, NukeFoundListener{
-    private final Game game;
-    private final GridPanel grid;
+    private Game game;
+    private GridPanel grid;
     private final TimerDisplay timeDisplay;
     private final Timer timer;
 
-    public GamePanel(Game game) {
-        this.game = game;
+    public GamePanel() {
+        this.game = new Game(Game.BEGINNER);
         this.grid = new GridPanel(game);
         this.timeDisplay = new TimerDisplay();
         this.timer = new Timer(1000, this);
         createComponents();
+    }
+    
+    public void newGame(Game game) {
+        this.game = game;
+        this.grid = new GridPanel(game);
+        this.timer.restart();
+        this.timeDisplay.restart();
+        revalidate();
+        repaint();
     }
     
     private void createComponents() {
@@ -87,14 +95,5 @@ public class GamePanel extends JPanel
     @Override
     public void actionPerformed(ActionEvent e) {
         timeDisplay.tick();
-    }
-}
-
-// TESTING
-class testing {
-
-    public static void main(String[] args) {
-        NukesweeperGUI gui = new NukesweeperGUI();
-        SwingUtilities.invokeLater(gui);
     }
 }

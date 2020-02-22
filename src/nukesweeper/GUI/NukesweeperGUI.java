@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import nukesweeper.Engine.Game;
 import nukesweeper.GUI.GameGui.GamePanel;
+import nukesweeper.GUI.MenuBar.NukesweeperMenu;
 
 /**
  *
@@ -35,16 +36,15 @@ public class NukesweeperGUI implements Runnable {
         createFont(compFontIO);
         JFrame frame = new JFrame("Nuke Sweeper");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(500, 500));
         createComponents(frame.getContentPane());
+        frame.setJMenuBar(new NukesweeperMenu());
         frame.pack();
         frame.setVisible(true);
     }
 
     private void createComponents(Container container) {
         container.setBackground(Color.DARK_GRAY);
-        Game game = new Game(5, 5, 5);
-        GamePanel gamePanel = new GamePanel(game);
+        GamePanel gamePanel = new GamePanel();
         container.add(gamePanel);
     }
 
@@ -53,7 +53,6 @@ public class NukesweeperGUI implements Runnable {
             //create the font to use. Specify the size!
             Font customFont = Font.createFont(
                     Font.TRUETYPE_FONT, io).deriveFont(12f);
-            System.out.println(customFont.getName());
             GraphicsEnvironment ge = 
                     GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font

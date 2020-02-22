@@ -26,7 +26,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
-import nukesweeper.GUI.NukesweeperGUI;
 
 /**
  *
@@ -45,6 +44,11 @@ public class TimerDisplay extends JPanel{
     
     public void tick() {
         timer.increase();
+        display.setText(timer.getTime());
+    }
+    
+    public void restart() {
+        timer.restart();
         display.setText(timer.getTime());
     }
     
