@@ -57,11 +57,7 @@ public class TimerDisplay extends JPanel{
         // Text
         display = new JLabel(timer.getTime());
         display.setForeground(Color.red);
-        try {
-            display.setFont(Font.createFont(Font.TRUETYPE_FONT, 
-                    NukesweeperGUI.techFontIO).deriveFont(20f));
-        } catch (Exception e) {
-        }
+        display.setFont(new Font("Technology", Font.PLAIN, 30));
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;

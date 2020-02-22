@@ -5,15 +5,18 @@
  */
 package nukesweeper.GUI;
 
-import nukesweeper.GUI.Node.NodeButton;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import nukesweeper.Engine.Node;
+import nukesweeper.Engine.Game;
+import nukesweeper.GUI.GameGui.GamePanel;
 
 /**
  *
@@ -21,8 +24,15 @@ import nukesweeper.Engine.Node;
  */
 public class NukesweeperGUI implements Runnable {
 
+    public static InputStream compFontIO
+            = NukesweeperGUI.class.getResourceAsStream("Fonts/Computerfont.ttf");
+    public static InputStream techFontIO
+            = NukesweeperGUI.class.getResourceAsStream("Fonts/Technology.ttf");
+
     @Override
     public void run() {
+        createFont(techFontIO);
+        createFont(compFontIO);
         JFrame frame = new JFrame("Nuke Sweeper");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
@@ -33,20 +43,35 @@ public class NukesweeperGUI implements Runnable {
 
     private void createComponents(Container container) {
         container.setBackground(Color.DARK_GRAY);
-        container.setLayout(new GridLayout(5, 5, 1, 1));
-        for (int i = 0; i < 25; i++) {
-            Node node = new Node(i, 0);
-            container.add(new NodeButton(node));
+        Game game = new Game(5, 5, 5);
+        GamePanel gamePanel = new GamePanel(game);
+        container.add(gamePanel);
+    }
+
+    private void createFont(InputStream io) {
+        try {
+            //create the font to use. Specify the size!
+            Font customFont = Font.createFont(
+                    Font.TRUETYPE_FONT, io).deriveFont(12f);
+            System.out.println(customFont.getName());
+            GraphicsEnvironment ge = 
+                    GraphicsEnvironment.getLocalGraphicsEnvironment();
+            //register the font
+            ge.registerFont(customFont);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FontFormatException e) {
+            e.printStackTrace();
         }
     }
-
-}
-
-// TESTING
-class testing {
-
-    public static void main(String[] args) {
-        NukesweeperGUI gui = new NukesweeperGUI();
-        SwingUtilities.invokeLater(gui);
-    }
+//    //testing
+//    private void printFonts () {
+//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        Font[] fonts = ge.getAllFonts();
+//        for (int i = 0; i < fonts.length; i ++) {
+//            if (fonts[i].getName().equals("Technology Regular") || fonts[i].getName().equals("Computerfont Regular")) {
+//                System.out.println(fonts[i]);
+//            }
+//        }
+//    }
 }

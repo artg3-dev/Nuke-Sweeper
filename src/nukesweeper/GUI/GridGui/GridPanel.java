@@ -78,6 +78,7 @@ public class GridPanel extends JPanel implements ActionListener {
         // Panel stuff
         setBackground(backgroundColor);
         setLayout(new GridBagLayout());
+        
 
         // Creates buttons
         for (int i = 0; i < grid.width; i++) {

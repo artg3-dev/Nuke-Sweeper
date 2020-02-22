@@ -8,9 +8,8 @@ package nukesweeper.GUI.Node;
 import nukesweeper.GUI.Icons.IconLoader;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -26,7 +25,7 @@ import nukesweeper.Engine.Node;
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
-public class NodeButton extends JButton implements MouseListener, ActionListener {
+public class NodeButton extends JButton implements MouseListener {
 
     private final Color[] textColors = new Color[]{
         Color.decode("#5544FF"), // 1
@@ -81,9 +80,9 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
             setIcon(nuke.getIcon(getPreferredSize().width - 20));
         } else {
             if (neighborCount > 0) {
-                int color = neighborCount - 1;
+                int colorIndex = neighborCount - 1;
                 setText("" + neighborCount);
-                setForeground(textColors[neighborCount]);
+                setForeground(textColors[colorIndex]);
             }
         }
     }
@@ -93,19 +92,19 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     }
 
     private void format() {
+        this.setFont(new Font("Technology", Font.PLAIN, 25));
         try {
             flag.load();
             nuke.load();
         } catch (IOException e) {
         }
         addMouseListener(this);
-        addActionListener(this);
         setFocusable(false);
         setBackground(backgroundColor);
         setBorder(defaultBorder);
         setPreferredSize(new Dimension(50, 50));
     }
-    
+
     @Override
     public void setEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
@@ -154,10 +153,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         int hash = 7;
         hash = 13 * hash + Objects.hashCode(this.node);
         return hash;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
     }
 
     @Override
