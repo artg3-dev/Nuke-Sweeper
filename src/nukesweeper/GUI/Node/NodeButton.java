@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -55,6 +56,7 @@ public class NodeButton extends JButton implements MouseListener {
                     BevelBorder.LOWERED, borderLight, borderDark);
 
     private final Node node;
+    private final double scalePercent = 0.7;
     private boolean flagged, isEnabled;
     private final IconLoader flag, nuke;
 
@@ -77,7 +79,8 @@ public class NodeButton extends JButton implements MouseListener {
         setBackground(checkedBackgroundColor);
         setBorder(checkedBorder);
         if (node.isNuke()) {
-            setIcon(nuke.getIcon(getPreferredSize().width - 20));
+            int scale = (int) (getPreferredSize().width * scalePercent);
+            setIcon(nuke.getIcon(scale));
         } else {
             if (neighborCount > 0) {
                 int colorIndex = neighborCount - 1;
@@ -92,7 +95,9 @@ public class NodeButton extends JButton implements MouseListener {
     }
 
     private void format() {
-        this.setFont(new Font("Technology", Font.PLAIN, 25));
+        this.setFont(new Font("Technology", Font.PLAIN, 20));
+        this.setHorizontalTextPosition(SwingConstants.CENTER);
+        this.setVerticalTextPosition(SwingConstants.CENTER);
         try {
             flag.load();
             nuke.load();
@@ -102,7 +107,7 @@ public class NodeButton extends JButton implements MouseListener {
         setFocusable(false);
         setBackground(backgroundColor);
         setBorder(defaultBorder);
-        setPreferredSize(new Dimension(50, 50));
+        setPreferredSize(new Dimension(25, 25));
     }
 
     @Override
@@ -172,7 +177,8 @@ public class NodeButton extends JButton implements MouseListener {
                     setIcon(null);
                 } else if (!node.wasChecked()) {
                     flagged = true;
-                    setIcon(flag.getIcon(getPreferredSize().width - 20));
+                    int scale = (int) (getPreferredSize().width * scalePercent);
+                    setIcon(flag.getIcon(scale));
                 }
             }
         }

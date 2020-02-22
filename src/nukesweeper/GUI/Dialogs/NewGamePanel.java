@@ -55,7 +55,7 @@ public class NewGamePanel extends JPanel implements ActionListener, ChangeListen
             int gridWidth = (Integer) width.getModel().getValue();
             int gridHeight = (Integer) height.getModel().getValue();
             int nukes = (Integer) nukeCount.getModel().getValue();
-            return new Game(WIDTH, HEIGHT, nukes);
+            return new Game(gridWidth, gridHeight, nukes);
         }
     }
 
