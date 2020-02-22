@@ -13,13 +13,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import nukesweeper.Engine.Exceptions.NukeFoundException;
 import nukesweeper.Engine.Game;
 import nukesweeper.Engine.Grid;
 import nukesweeper.Engine.Node;
+import nukesweeper.GUI.CustomListeners.GameStartListener;
+import nukesweeper.GUI.CustomListeners.NukeFoundListener;
 import nukesweeper.GUI.Node.NodeButton;
-import nukesweeper.GUI.NukesweeperGUI;
 
 /**
  *
@@ -32,15 +32,27 @@ public class GridPanel extends JPanel implements ActionListener {
     private final Game game;
     private final Grid grid;
     private final ArrayList<NodeButton> nodeButtons;
+    private final ArrayList<GameStartListener> gameStartListeners;
+    private final ArrayList<NukeFoundListener> nukeFoundListeners;
 
     public GridPanel(Game game) {
         this.game = game;
         this.grid = game.getGrid();
         this.nodeButtons = new ArrayList();
+        this.gameStartListeners = new ArrayList();
+        this.nukeFoundListeners = new ArrayList();
         createComponents();
     }
+    
+    public void addGameStartListener(GameStartListener listener) {
+        gameStartListeners.add(listener);
+    }
+    
+    public void addNukeFoundListener(NukeFoundListener listener) {
+        nukeFoundListeners.add(listener);
+    }
 
-    private void revealCheckedNodes() {
+    public void revealCheckedNodes() {
         for (NodeButton i : nodeButtons) {
             Node node = i.getNode();
             if (node.wasChecked()) {
@@ -50,7 +62,7 @@ public class GridPanel extends JPanel implements ActionListener {
         }
     }
 
-    private void revealAllNukes() {
+    public void revealAllNukes() {
         for (NodeButton i : nodeButtons) {
             Node node = i.getNode();
             if (node.isNuke()) {
@@ -105,22 +117,17 @@ public class GridPanel extends JPanel implements ActionListener {
                     game.checkNode(node);
                     revealCheckedNodes();
                 } catch (NukeFoundException ex) {
-                    // DO THE NUKE FOUND METHOD!
-                    revealAllNukes();
+                    for (NukeFoundListener i : nukeFoundListeners) {
+                        i.nukeFound();
+                    }
                 }
             }
         } else {
-            game.start(node);
-            actionPerformed(e);
+            for (GameStartListener i: gameStartListeners) {
+                i.startGame(node);
+            }
+            this.actionPerformed(e);
         }
     }
 }
 
-// TESTING
-class testing {
-
-    public static void main(String[] args) {
-        NukesweeperGUI gui = new NukesweeperGUI();
-        SwingUtilities.invokeLater(gui);
-    }
-}
