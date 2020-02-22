@@ -5,8 +5,10 @@
  */
 package nukesweeper.GUI.GridGui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import nukesweeper.GUI.NukesweeperGUI;
  */
 public class GridPanel extends JPanel implements ActionListener {
 
+    private final Color backgroundColor = Color.decode("#9EA49E");
+
     private final Game game;
     private final Grid grid;
     private final ArrayList<NodeButton> nodeButtons;
@@ -35,7 +39,7 @@ public class GridPanel extends JPanel implements ActionListener {
         this.nodeButtons = new ArrayList();
         createComponents();
     }
-    
+
     private void revealCheckedNodes() {
         for (NodeButton i : nodeButtons) {
             Node node = i.getNode();
@@ -45,7 +49,7 @@ public class GridPanel extends JPanel implements ActionListener {
             }
         }
     }
-    
+
     private void revealAllNukes() {
         for (NodeButton i : nodeButtons) {
             Node node = i.getNode();
@@ -56,16 +60,35 @@ public class GridPanel extends JPanel implements ActionListener {
     }
 
     private void createComponents() {
-        // Creates buttons
+        // Panel stuff
+        setBackground(backgroundColor);
         setLayout(new GridBagLayout());
+
+        // Creates buttons
         for (int i = 0; i < grid.width; i++) {
             for (int j = 0; j < grid.height; j++) {
+                // Layout stuff
+                int insetConstant = 2;
+                int top = 0;
+                int left = 0;
+                int bottom = insetConstant;
+                int right = insetConstant;
+                if (i == 0) {
+                    left = insetConstant;
+                }
+                if (j == 0) {
+                    top = insetConstant;
+                }
                 GridBagConstraints c = new GridBagConstraints();
+                c.insets = new Insets(top, left, bottom, right);
                 c.gridx = i;
                 c.gridy = j;
+
+                // NodeButton stuff
                 Node node = grid.getNode(i, j);
                 NodeButton nodeButton = new NodeButton(node);
                 nodeButton.addActionListener(this);
+
                 nodeButtons.add(nodeButton);
                 add(nodeButton, c);
             }
@@ -75,13 +98,20 @@ public class GridPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         NodeButton button = (NodeButton) e.getSource();
-        game.start(button.getNode());
-        try {
-            game.checkNode(button.getNode());
-            revealCheckedNodes();
-        } catch (NukeFoundException ex) {
-            // DO THE NUKE FOUND METHOD!
-            revealAllNukes();
+        Node node = button.getNode();
+        if (game.hasStarted()) {
+            if (!button.isFlagged()) {
+                try {
+                    game.checkNode(node);
+                    revealCheckedNodes();
+                } catch (NukeFoundException ex) {
+                    // DO THE NUKE FOUND METHOD!
+                    revealAllNukes();
+                }
+            }
+        } else {
+            game.start(node);
+            actionPerformed(e);
         }
     }
 }

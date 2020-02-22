@@ -49,6 +49,10 @@ public class Game {
         this.nukeCount = nukeCount;
         started = false;
     }
+    
+    public boolean hasStarted() {
+        return started;
+    }
 
     public boolean start(Node startingNode) {
         if (!started) { // To prevent starting the board mid-game
