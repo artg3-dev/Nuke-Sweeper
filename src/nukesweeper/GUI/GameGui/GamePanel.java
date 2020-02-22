@@ -16,8 +16,10 @@
  */
 package nukesweeper.GUI.GameGui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
@@ -51,6 +53,7 @@ public class GamePanel extends JPanel
 
     private void createComponents() {
         setLayout(new GridBagLayout());
+        setBackground(Color.DARK_GRAY);
         GridBagConstraints c;
         
         // Timer
@@ -58,6 +61,7 @@ public class GamePanel extends JPanel
         c.gridx = 2;
         c.gridy = 0;
         c.anchor = GridBagConstraints.LINE_END;
+        c.insets = new Insets(0, 0, 10, 0);
         add (timeDisplay, c);
         
         // Grid

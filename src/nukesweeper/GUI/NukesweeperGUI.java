@@ -7,6 +7,7 @@ package nukesweeper.GUI;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -46,6 +47,7 @@ public class NukesweeperGUI implements Runnable {
         createFont(compFontIO);
         frame = new JFrame("Nuke Sweeper");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setResizable(false);
         createComponents();
         frame.setJMenuBar(menuBar);
         frame.pack();
@@ -55,6 +57,7 @@ public class NukesweeperGUI implements Runnable {
     private void createComponents() {
         // Content setup
         Container container = frame.getContentPane();
+        container.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         container.setBackground(Color.DARK_GRAY);
         gamePanel = new GamePanel(new Game(Game.BEGINNER));
         container.add(gamePanel);
