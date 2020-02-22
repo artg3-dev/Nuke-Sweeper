@@ -7,6 +7,7 @@ package nukesweeper.GUI.Node;
 
 import nukesweeper.GUI.Icons.IconLoader;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,6 +75,8 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         setFocusable(false);
         setBackground(backgroundColor);
         setBorder(defaultBorder);
+        setPreferredSize(new Dimension(50, 50));
+//        setMaximumSize(getPreferredSize());
     }
 
     @Override
@@ -130,7 +133,7 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         }
         setBackground(checkedBackgroundColor);
         setBorder(checkedBorder);
-        setIcon(nuke.getIcon(iconScale));
+        setIcon(nuke.getIcon(getPreferredSize().width - 20));
     }
 
     @Override
@@ -150,7 +153,7 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
                     setIcon(null);
                 } else if (!node.wasChecked()) {
                     flagged = true;
-                    setIcon(flag.getIcon(iconScale));
+                    setIcon(flag.getIcon(getPreferredSize().width - 20));
                 }
             }
         }

@@ -24,8 +24,8 @@ import java.util.ArrayList;
  */
 public class Grid {
     private final Node[][] grid;
-    final int width;
-    final int height;
+    public final int width;
+    public final int height;
 
     public Grid(int width, int height) {
         this.width = width;
@@ -34,7 +34,7 @@ public class Grid {
         fillGrid();
     }
     
-    Node getNode(int x, int y) {
+    public Node getNode(int x, int y) {
         return grid[x][y];
     }
     
