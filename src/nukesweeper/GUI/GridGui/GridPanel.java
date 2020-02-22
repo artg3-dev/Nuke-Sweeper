@@ -34,6 +34,8 @@ public class GridPanel extends JPanel implements ActionListener {
     private final ArrayList<NodeButton> nodeButtons;
     private final ArrayList<GameStartListener> gameStartListeners;
     private final ArrayList<NukeFoundListener> nukeFoundListeners;
+    
+    private boolean isEnabled; 
 
     public GridPanel(Game game) {
         this.game = game;
@@ -41,6 +43,7 @@ public class GridPanel extends JPanel implements ActionListener {
         this.nodeButtons = new ArrayList();
         this.gameStartListeners = new ArrayList();
         this.nukeFoundListeners = new ArrayList();
+        this.isEnabled = true;
         createComponents();
     }
     
@@ -70,7 +73,7 @@ public class GridPanel extends JPanel implements ActionListener {
             }
         }
     }
-
+    
     private void createComponents() {
         // Panel stuff
         setBackground(backgroundColor);
@@ -108,10 +111,18 @@ public class GridPanel extends JPanel implements ActionListener {
     }
 
     @Override
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+        for (NodeButton i : nodeButtons) {
+            i.setEnabled(isEnabled);
+        }
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         NodeButton button = (NodeButton) e.getSource();
         Node node = button.getNode();
-        if (game.hasStarted()) {
+        if (game.hasStarted() && isEnabled) {
             if (!button.isFlagged()) {
                 try {
                     game.checkNode(node);
@@ -122,7 +133,7 @@ public class GridPanel extends JPanel implements ActionListener {
                     }
                 }
             }
-        } else {
+        } else if (isEnabled){
             for (GameStartListener i: gameStartListeners) {
                 i.startGame(node);
             }

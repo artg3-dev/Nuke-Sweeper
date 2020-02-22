@@ -81,7 +81,7 @@ public class GamePanel extends JPanel
     public void nukeFound() {
         timer.stop();
         grid.revealAllNukes();
-        System.out.println("nuke");
+        grid.setEnabled(false);
     }
 
     @Override

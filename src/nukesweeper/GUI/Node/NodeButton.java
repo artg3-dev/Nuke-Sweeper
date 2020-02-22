@@ -56,7 +56,7 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
                     BevelBorder.LOWERED, borderLight, borderDark);
 
     private final Node node;
-    private boolean flagged;
+    private boolean flagged, isEnabled;
     private final IconLoader flag, nuke;
 
     public NodeButton(Node node) {
@@ -64,6 +64,7 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         super.setContentAreaFilled(false);
         this.node = node;
         this.flagged = false;
+        this.isEnabled = true;
         this.flag = new IconLoader("nuclear.png");
         this.nuke = new IconLoader("missile.png");
         format();
@@ -104,16 +105,20 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         setBorder(defaultBorder);
         setPreferredSize(new Dimension(50, 50));
     }
+    
+    @Override
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
-        if (getModel().isPressed()) {
-//            g.setColor(Color.pink);
+        if (getModel().isPressed() && isEnabled) {
             g.setColor(getBackground());
             if (!node.wasChecked()) {
                 setBorder(defaultBorder);
             }
-        } else if (getModel().isRollover()) {
+        } else if (getModel().isRollover() && isEnabled) {
             g.setColor(getBackground());
             if (!node.wasChecked()) {
                 setBorder(hoverBorder);
@@ -165,7 +170,7 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (this.getMousePosition() != null) {
+        if (this.getMousePosition() != null && isEnabled) {
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (flagged) {
                     flagged = false;
