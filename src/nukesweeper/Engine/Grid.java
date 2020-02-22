@@ -73,7 +73,7 @@ public class Grid {
         return count;
     }
     
-    int getNeighborNukeCount(Node node) {
+    public int getNeighborNukeCount(Node node) {
         return getNeighborNukeCount(node.getX(), node.getY());
     }
     

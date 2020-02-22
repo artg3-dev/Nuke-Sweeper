@@ -20,7 +20,6 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import nukesweeper.Engine.Exceptions.NukeFoundException;
 import nukesweeper.Engine.Node;
 
 /**
@@ -28,6 +27,17 @@ import nukesweeper.Engine.Node;
  * @author Art Garcia (artg3.dev@gmail.com)
  */
 public class NodeButton extends JButton implements MouseListener, ActionListener {
+
+    private final Color[] textColors = new Color[]{
+        Color.decode("#5544FF"), // 1
+        Color.decode("#23B200"), // 2
+        Color.decode("#FF6D6D"), // 3
+        Color.decode("#AE00FF"), // 4 
+        Color.decode("#F41818"), // 5
+        Color.decode("#19D5B2"), // 6
+        Color.decode("#D1FF00"), // 7
+        Color.decode("#FFFFFF") // 8
+    };
 
     private final Color backgroundColor = Color.decode("#000000");
     private final Color checkedBackgroundColor = Color.decode("#2D2D2D");
@@ -44,7 +54,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
     private final Border checkedBorder
             = BorderFactory.createBevelBorder(
                     BevelBorder.LOWERED, borderLight, borderDark);
-    private final int iconScale = 61;
 
     private final Node node;
     private boolean flagged;
@@ -58,6 +67,24 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         this.flag = new IconLoader("nuclear.png");
         this.nuke = new IconLoader("missile.png");
         format();
+    }
+
+    public Node getNode() {
+        return this.node;
+    }
+
+    public void reveal(int neighborCount) {
+        setBackground(checkedBackgroundColor);
+        setBorder(checkedBorder);
+        if (node.isNuke()) {
+            setIcon(nuke.getIcon(getPreferredSize().width - 20));
+        } else {
+            if (neighborCount > 0) {
+                int color = neighborCount - 1;
+                setText("" + neighborCount);
+                setForeground(textColors[neighborCount]);
+            }
+        }
     }
 
     public boolean isFlagged() {
@@ -76,7 +103,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
         setBackground(backgroundColor);
         setBorder(defaultBorder);
         setPreferredSize(new Dimension(50, 50));
-//        setMaximumSize(getPreferredSize());
     }
 
     @Override
@@ -127,13 +153,6 @@ public class NodeButton extends JButton implements MouseListener, ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-            node.check();
-        } catch (NukeFoundException ex) {
-        }
-        setBackground(checkedBackgroundColor);
-        setBorder(checkedBorder);
-        setIcon(nuke.getIcon(getPreferredSize().width - 20));
     }
 
     @Override
