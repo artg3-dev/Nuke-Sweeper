@@ -17,10 +17,16 @@
 package nukesweeper.GUI.Timer;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+import nukesweeper.GUI.NukesweeperGUI;
 
 /**
  *
@@ -43,12 +49,26 @@ public class TimerDisplay extends JPanel{
     }
     
     private void createComponents() {
-        display = new JLabel(timer.getTime());
-        display.setOpaque(true);
-        display.setBackground(Color.black);
-        display.setForeground(Color.red);
-        display.setBorder(BorderFactory.createBevelBorder(
+        setLayout(new GridBagLayout());
+        
+        setBackground(Color.black);
+        setBorder(BorderFactory.createBevelBorder(
                 BevelBorder.LOWERED, borderLight, borderDark));
-        add(display);
+        // Text
+        display = new JLabel(timer.getTime());
+        display.setForeground(Color.red);
+        try {
+            display.setFont(Font.createFont(Font.TRUETYPE_FONT, 
+                    NukesweeperGUI.techFontIO).deriveFont(20f));
+        } catch (Exception e) {
+        }
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = new Insets(2, 2, 2, 2);
+        c.anchor = GridBagConstraints.CENTER;
+        add(display, c);
+        
+        setPreferredSize(new Dimension(display.getPreferredSize().width + 5, display.getPreferredSize().height + 5));
     }
 }
