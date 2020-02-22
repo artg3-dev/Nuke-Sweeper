@@ -14,34 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nukesweeper.Engine;
+package nukesweeper.GUI.Actions;
 
-import java.util.Scanner;
-import nukesweeper.Engine.Exceptions.NukeFoundException;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.JFrame;
+import nukesweeper.Engine.Game;
+import nukesweeper.GUI.Dialogs.NewGameDialog;
+import nukesweeper.GUI.GameGui.GamePanel;
+import nukesweeper.GUI.NukesweeperGUI;
 
 /**
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
-public class Main {
+public class NewGameAction extends AbstractAction{
+    private final NukesweeperGUI gui;
+    private final JFrame frame;
 
-    public static void main(String[] args) {
-        Game game = new Game(10, 10, 10);
-        Grid grid = game.getGrid();
-        game.start(grid.getNode(0, 0));
-        game.printGrid();
-        Scanner reader = new Scanner(System.in);
-        while (true) {
-            System.out.print("X: ");
-            int x = Integer.parseInt(reader.nextLine());
-            System.out.print("Y: ");
-            int y = Integer.parseInt(reader.nextLine());
-            try {
-                game.checkNode(grid.getNode(x, y));
-            } catch (NukeFoundException ex) {
-                System.out.println("NUKE");
-            }
-            game.printGrid();
+    public NewGameAction(NukesweeperGUI gui, JFrame frame) {
+        this.gui = gui;
+        this.frame = frame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        NewGameDialog dialog = new NewGameDialog(frame);
+        Game newGame = dialog.getNewGame();
+        if (newGame != null) {
+            gui.newGame(newGame);
         }
     }
+    
 }
