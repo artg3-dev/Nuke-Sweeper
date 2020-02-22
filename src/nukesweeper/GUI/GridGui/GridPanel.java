@@ -34,8 +34,8 @@ public class GridPanel extends JPanel implements ActionListener {
     private final ArrayList<NodeButton> nodeButtons;
     private final ArrayList<GameStartListener> gameStartListeners;
     private final ArrayList<NukeFoundListener> nukeFoundListeners;
-    
-    private boolean isEnabled; 
+
+    private boolean isEnabled;
 
     public GridPanel(Game game) {
         this.game = game;
@@ -46,11 +46,11 @@ public class GridPanel extends JPanel implements ActionListener {
         this.isEnabled = true;
         createComponents();
     }
-    
+
     public void addGameStartListener(GameStartListener listener) {
         gameStartListeners.add(listener);
     }
-    
+
     public void addNukeFoundListener(NukeFoundListener listener) {
         nukeFoundListeners.add(listener);
     }
@@ -73,12 +73,11 @@ public class GridPanel extends JPanel implements ActionListener {
             }
         }
     }
-    
+
     private void createComponents() {
         // Panel stuff
         setBackground(backgroundColor);
         setLayout(new GridBagLayout());
-        
 
         // Creates buttons
         for (int i = 0; i < grid.width; i++) {
@@ -112,6 +111,16 @@ public class GridPanel extends JPanel implements ActionListener {
     }
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Game:\n");
+        sb.append(game);
+        return sb.toString();
+    }
+    
+    
+
+    @Override
     public void setEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
         for (NodeButton i : nodeButtons) {
@@ -134,12 +143,11 @@ public class GridPanel extends JPanel implements ActionListener {
                     }
                 }
             }
-        } else if (isEnabled){
-            for (GameStartListener i: gameStartListeners) {
+        } else if (isEnabled) {
+            for (GameStartListener i : gameStartListeners) {
                 i.startGame(node);
             }
             this.actionPerformed(e);
         }
     }
 }
-

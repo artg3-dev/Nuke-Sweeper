@@ -112,7 +112,7 @@ public class Game {
 
     private Grid generateGrid(String difficulty) {
         if (difficulty.equals(EXPERT)) {
-            return new Grid(16, 30);
+            return new Grid(30, 16);
         }
         if (difficulty.equals(INTERMEDIATE)) {
             return new Grid(16, 16);
@@ -131,6 +131,20 @@ public class Game {
             return 10;
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Width: ");
+        sb.append(grid.width);
+        sb.append("Height: ");
+        sb.append(grid.height);
+        sb.append("Nukes: ");
+        sb.append(nukeCount);
+        return sb.toString();
+    }
+    
+    
 
     // TESTING
     public void printGrid() {

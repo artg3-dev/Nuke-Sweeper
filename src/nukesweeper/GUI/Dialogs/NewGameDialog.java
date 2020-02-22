@@ -16,7 +16,6 @@
  */
 package nukesweeper.GUI.Dialogs;
 
-import static com.sun.glass.ui.Cursor.setVisible;
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,23 +23,26 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import nukesweeper.Engine.Game;
 
 /**
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
 public class NewGameDialog extends JDialog implements PropertyChangeListener{
-    
-    private final JOptionPane optionPane;
+    private NewGamePanel newGamePanel;
+    private JOptionPane optionPane;
+    private Game newGame;
 
-    public CreateHordeDialog(Frame frame) {
+    public NewGameDialog(Frame frame) {
         super(frame, true);
-
-        setTitle("Create a new Horde");
-        String createButtonTxt = "Create";
+        setTitle("Create a new Game");
+        String createButtonTxt = "Start";
         Object[] options = {createButtonTxt};
-
-        optionPane = new JOptionPane(hordePanel,
+        
+        newGamePanel = new NewGamePanel();
+        newGame = null;
+        optionPane = new JOptionPane(newGamePanel,
                 JOptionPane.PLAIN_MESSAGE,
                 JOptionPane.OK_OPTION,
                 null, //icon
@@ -72,31 +74,12 @@ public class NewGameDialog extends JDialog implements PropertyChangeListener{
             * This is where the error list is displayed
             * or the monster is created
              */
-            List<String> errors = hordePanel.hasValidInfo();
-            if (errors.isEmpty()) {
-                //create the horde here
-                try {
-                    this.horde = hordePanel.getCreatedHorde();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this,
-                            ex.getLocalizedMessage(),
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE,
-                            null);
-                }
-                dispose();
-                
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        errors.toArray(),
-                        "Horde incomplete or incorrect",
-                        JOptionPane.ERROR_MESSAGE,
-                        null);
-            }
+            newGame = newGamePanel.getGame();
+            dispose();
         }
     }
-
-    public Horde getHorde() {
-        return this.horde;
+    
+    public Game getNewGame() {
+        return newGame;
     }
 }

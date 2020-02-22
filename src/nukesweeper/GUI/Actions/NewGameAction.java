@@ -18,21 +18,32 @@ package nukesweeper.GUI.Actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import javax.swing.JFrame;
+import nukesweeper.Engine.Game;
+import nukesweeper.GUI.Dialogs.NewGameDialog;
 import nukesweeper.GUI.GameGui.GamePanel;
+import nukesweeper.GUI.NukesweeperGUI;
 
 /**
  *
  * @author Art Garcia (artg3.dev@gmail.com)
  */
-public class NewGame extends AbstractAction{
-    private final GamePanel gamePanel;
+public class NewGameAction extends AbstractAction{
+    private final NukesweeperGUI gui;
+    private final JFrame frame;
 
-    public NewGame(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public NewGameAction(NukesweeperGUI gui, JFrame frame) {
+        this.gui = gui;
+        this.frame = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        NewGameDialog dialog = new NewGameDialog(frame);
+        Game newGame = dialog.getNewGame();
+        if (newGame != null) {
+            gui.newGame(newGame);
+        }
     }
     
 }

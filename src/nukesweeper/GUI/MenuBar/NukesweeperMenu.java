@@ -17,11 +17,11 @@
 package nukesweeper.GUI.MenuBar;
 
 import com.sun.glass.events.KeyEvent;
-import java.awt.Color;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import nukesweeper.GUI.Actions.NewGameAction;
 
 /**
  *
@@ -35,8 +35,12 @@ public class NukesweeperMenu extends JMenuBar{
         createComponents();
     }
     
+    public void addNewGameAction(NewGameAction action) {
+        newGame.setAction(action);
+        newGame.setText("New Game");
+    }
+    
     private void createComponents() {
-        
         gameMenu = new JMenu("Game");
         newGame = new JMenuItem("New Game");
         newGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));

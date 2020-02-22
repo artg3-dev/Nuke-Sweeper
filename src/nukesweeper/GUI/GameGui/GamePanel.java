@@ -41,23 +41,14 @@ public class GamePanel extends JPanel
     private final TimerDisplay timeDisplay;
     private final Timer timer;
 
-    public GamePanel() {
-        this.game = new Game(Game.BEGINNER);
-        this.grid = new GridPanel(game);
+    public GamePanel(Game game) {
+        this.game = game;
+        this.grid = new GridPanel(this.game);
         this.timeDisplay = new TimerDisplay();
         this.timer = new Timer(1000, this);
         createComponents();
     }
-    
-    public void newGame(Game game) {
-        this.game = game;
-        this.grid = new GridPanel(game);
-        this.timer.restart();
-        this.timeDisplay.restart();
-        revalidate();
-        repaint();
-    }
-    
+
     private void createComponents() {
         setLayout(new GridBagLayout());
         GridBagConstraints c;
